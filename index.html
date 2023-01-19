@@ -1,21 +1,29 @@
 <form>
-  <input type="text" name="search">
+  <label for="search">Search:</label>
+  <input type="text" id="search" name="search">
   <input type="submit" value="Search">
 </form>
-<script>
-  var form = document.querySelector("form");
-  form.addEventListener("submit", handleSearch);
-</script>
-function handleSearch(event) {
-  event.preventDefault();
-  var query = document.querySelector("input[name=search]").value;
-  fetch("words.txt")
-    .then(response => response.text())
-    .then(text => {
-      if (text.includes(query)) {
-        alert("Query found in file!");
-      } else {
-        alert("Query not found in file.");
-      }
-    });
+var xhr = new XMLHttpRequest();
+xhr.open("GET", "words.txt", true);
+xhr.onreadystatechange = function() {
+  if (xhr.readyState === 4 && xhr.status === 200) {
+    var words = xhr.responseText.split("\n");
+  }
+};
+xhr.send();
+var words = xhr.responseText.split("\n");
+var results = words.filter(function(word) {
+  return word.indexOf(searchQuery) !== -1;
+});
+var ul = document.createElement("ul");
+for (var i = 0; i < results.length; i++) {
+  var li = document.createElement("li");
+  li.innerHTML = results[i];
+  ul.appendChild(li);
 }
+document.body.appendChild(ul);
+document.querySelector("form").addEventListener("submit", function(event) {
+  event.preventDefault();
+  var searchQuery = document.querySelector("input[name='search']").value;
+  search(searchQuery);
+});
