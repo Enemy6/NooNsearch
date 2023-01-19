@@ -1,5 +1,26 @@
-<form>
-  <label for="search">Search:</label>
-  <input type="text" id="search" name="search">
-  <input type="submit" value="Search">
+<!DOCTYPE html>
+<html>
+<head>
+	<title>HTML Search Engine</title>
+</head>
+<body>
+<form action="" method="post">
+	<input type="text" name="keyword" placeholder="Enter keyword">
+	<input type="submit" value="Search">
 </form>
+<?php
+if (isset($_POST['keyword'])) {
+	$keyword = $_POST['keyword'];
+	$files = scandir('.');
+	foreach ($files as $file) {
+		if (strpos($file, '.html') !== false) {
+			$html = file_get_contents($file);
+			if (strpos($html, $keyword) !== false) {
+				echo '<p><a href="' . $file . '">' . $file . '</a></p>';
+			}
+		}
+	}
+}
+?>
+</body>
+</html>
