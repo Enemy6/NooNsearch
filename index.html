@@ -1,14 +1,21 @@
-<!DOCTYPE html>
-<html>
-<head>
-  <title>NooNsearch</title>
-</head>
-<body>
-  <h1>Welcome to NooNsearch</h1>
-  <form action="https://enemy6.github.io/search" method="get">
-    <label for="search-query">Search Query:</label>
-    <input type="text" id="search-query" name="q">
-    <input type="submit" value="Search">
-  </form>
-</body>
-</html>
+<form>
+  <input type="text" name="search">
+  <input type="submit" value="Search">
+</form>
+<script>
+  var form = document.querySelector("form");
+  form.addEventListener("submit", handleSearch);
+</script>
+function handleSearch(event) {
+  event.preventDefault();
+  var query = document.querySelector("input[name=search]").value;
+  fetch("words.txt")
+    .then(response => response.text())
+    .then(text => {
+      if (text.includes(query)) {
+        alert("Query found in file!");
+      } else {
+        alert("Query not found in file.");
+      }
+    });
+}
